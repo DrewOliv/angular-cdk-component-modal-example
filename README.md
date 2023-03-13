@@ -1,23 +1,24 @@
-E aí, pessoal! Já imaginou criar suas próprias modais para suas aplicações web? Isso mesmo, sem precisar se preocupar com bibliotecas de terceirosl! Com @angular/cdk, conseguimos tornar essa tarefa muito mais fácil.
+E aí, pessoal! Já pensou em criar suas própria modal para suas aplicações web sem se preocupar com bibliotecas de terceiros? Com o @angular/cdk, podemos tornar essa tarefa muito mais fácil.
 
-O @angular/cdk contém vários componentes prontos para uso, como o Overlay e o Portal, que vão ajudar muito na criação de suas modais personalizadas.
+O @angular/cdk contém vários componentes prontos para uso, como o Overlay e o Portal, que ajudam muito na criação de modais personalizadas.
 
-E adivinha só? Neste artigo, eu vou te mostrar como criar uma modal personalizada usando o @angular/cdk e @ViewChild. Então, pegue o seu café vamos e vamos ao código 👨‍💻 
+Neste artigo, vou te mostrar como criar uma modal personalizada usando o @angular/cdk e @ViewChild. Então, pegue seu café e vamos ao código 👨‍💻
 
 ## Pré-requisitos:
 
 Para acompanhar este tutorial, você precisará de um projeto Angular e ter um breve conhecimento sobres os conceitos do Angular.
 
-## É Hora de implementar
-Vamos começar instalando o @angular/cdk, podemos fazer isso via `npm install @angular/cdk` ou utilizar o comando que o @angular/cli disponibiliza `ng add @angular/cdk`.
+**Atenção! Este tutorial foi criado usando Angular 15, mas com um pouco de esforço, é possível implementá-lo em versões anteriores do Angular.**
 
-devemos também incluir estilos do que o @angular/cdk disponibiliza em nosso arquivo de css global
+### É Hora de implementar
+
+Para iniciar, é necessário instalar o pacote @angular/cdk através do comando npm install @angular/cdk ou utilizar a opção ng add @angular/cdk fornecida pelo @angular/cli. É importante também incluir os estilos disponíveis do @angular/cdk no seu arquivo de CSS global.
 
 ```css
-@import '@angular/cdk/overlay-prebuilt.css';
+@import "@angular/cdk/overlay-prebuilt.css";
 ```
 
-agora que temos o cdk instalado vamos criar o nosso component modal, para isso iremos utilizar o @angular/cli
+Para criar o nosso componente modal utilizando o @angular/cli, execute o seguinte comando no terminal dentro do diretório do seu projeto:
 
 ```sh
 ng g c modal
@@ -26,25 +27,24 @@ ng g c modal
 após gerar nosso component via @angular/cli devemos ter algo assim:
 
 ```ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css'],
+  selector: "app-modal",
+  templateUrl: "./modal.component.html",
+  styleUrls: ["./modal.component.css"],
   standalone: true,
 })
 export class ModalComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
 ```
 
-Certo! vamos começar criando uma variavel `MODAL_DEFAULT_OPTIONS` com alguns valores default.
+Ótimo! Vamos começar criando uma variável chamada MODAL_DEFAULT_OPTIONS com alguns valores padrão. Nela, definimos o positionStrategy como GlobalPositionStrategy, o que fará com que o Overlay trabalhe com o posicionamento relativo à janela do navegador. Em seguida, chamamos os métodos centerHorizontally() e centerVertically() para alinhar nossa modal ao centro da tela.
+
+Também definimos que a modal terá um fundo (hasBackdrop) e adicionamos uma classe personalizada chamada modal-panel para nosso painel. Por fim, definimos uma largura mínima para nossa modal de 500px.
 
 ```ts
 export const MODAL_DEFAULT_OPTIONS: OverlayConfig = {
@@ -57,29 +57,25 @@ export const MODAL_DEFAULT_OPTIONS: OverlayConfig = {
 };
 ```
 
-Nessa variável vamos definir o `positionStrategy` como `GlobalPositionStrategy`. Isso fará com que o Overlay trabalhe com o posicionamento relativo à janela do navegador. Além disso, chamamos os seguintes métodos: `centerHorizontally()` e `centerVertically()`, para alinharmos o nossa modal ao centro da tela.
+O próximo passo é criar um ng-template em nosso arquivo HTML e incluir algumas tags HTML para ajudar a estruturar nossa modal:
 
-Também definimos que a modal terá um `hasBackdrop` (fundo) e adicionamos uma `class` personalizada  `modal-panel` para o nosso painel. E, por fim, definimos uma largura mínima para nossa modal `500px`.
-
-O proximo passo é criamos um `ng-template` em nosso arquivo html, vamos aproveitar também para incluir alguns tags html que vão nos ajudar a estruturar nossa modal.
-
-- criamos um `ng-template` e demos um nome de referencia a ele `#modalTemplate` 
-- criamos uma `div` apenas para agrupar nossos elementos 
-- criamos um `ng-content` e definimos o select `[modal--content]` 
+Criamos um ng-template e demos a ele um nome de referência `#modalTemplate`.
+Criamos uma div para agrupar nossos elementos.
+Adicionamos um ng-content com o seletor `[modal--content]`.
 
 ```html
 <ng-template #modalTemplate>
   <div class="modal">
-    <ng-content select="[modal--content]"></ng-content>    
+    <ng-content select="[modal--content]"></ng-content>
   </div>
 </ng-template>
 ```
 
-criamos um `ng-template` pois so queremos que o contéudo dele seja chamado, quando criarmos nossa modal, faremos isso utilizando o `TemplatePortal`.
+Vamos criar um ng-template para que o conteúdo seja chamado apenas quando criarmos nossa modal utilizando o `TemplatePortal`.
 
 O TemplatePortal é uma classe do `@angular/cdk/portal` que nos permite inserir conteúdo em um componente ou elemento de destino.
 
-agora que ja temos o nosso template defindo no html vamos criar uma variavel e utilzarmos do decorator `@ViewChild` passando o 'nome' que demos ao nosso template no html, também iremos criar uma variavel chamada `overlayRef`
+Agora que já temos o nosso template definido no HTML, vamos criar uma variável e utilizar o decorator `@ViewChild`, passando o nome que demos ao nosso template no HTML. Além disso, vamos criar uma variável chamada `overlayRef` para controlar a exibição da nossa modal.
 
 ```ts
  @ViewChild("modalTemplate") modalTemplate: TemplateRef<any>;
@@ -120,11 +116,11 @@ public open() {
     return this.overlayRef;
 }
 ```
- 
-Agora método `close()` ele é responsável por fechar a modal. Ele simplesmente chama o método `dispose()` no `overlayRef`, o que faz com que a modal seja removida da tela 
+
+Agora método `close()` ele é responsável por fechar a modal. Ele simplesmente chama o método `dispose()` no `overlayRef`, o que faz com que a modal seja removida da tela
 
 ```ts
-public close() {    
+public close() {
     this.overlayRef.dispose();
 }
 ```
@@ -144,18 +140,17 @@ Otimo! finalizamos a implementação da nossa modal, agora vamos utilizar.
 Para utilizar o componente `ModalComponent`, podemos criar um botão que chama o método open() e um outro botão dentro da modal que chama o método close(). Podemos utilizar a referência do componente utilizando o decorator `@ViewChild`.
 
 ```ts
-import 'zone.js/dist/zone';
-import { Component, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { bootstrapApplication } from '@angular/platform-browser';
-import { ModalComponent } from './modal/modal.component';
+import "zone.js/dist/zone";
+import { Component, ViewChild } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { bootstrapApplication } from "@angular/platform-browser";
+import { ModalComponent } from "./modal/modal.component";
 
 @Component({
-  selector: 'my-app',
+  selector: "my-app",
   standalone: true,
   imports: [CommonModule, ModalComponent],
-  template: ` 
-  
+  template: `
     <button (click)="modalOpen()">Abrir modal</button>
 
     <app-modal #modal>
@@ -167,9 +162,9 @@ import { ModalComponent } from './modal/modal.component';
   `,
 })
 export class App {
-  @ViewChild('modal') modal: ModalComponent;
+  @ViewChild("modal") modal: ModalComponent;
 
-  name = 'Angular';
+  name = "Angular";
 
   modalOpen() {
     this.modal.open();
@@ -186,17 +181,17 @@ bootstrapApplication(App);
 ou
 
 ```ts
-import 'zone.js/dist/zone';
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { bootstrapApplication } from '@angular/platform-browser';
-import { ModalComponent } from './modal/modal.component';
+import "zone.js/dist/zone";
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { bootstrapApplication } from "@angular/platform-browser";
+import { ModalComponent } from "./modal/modal.component";
 
 @Component({
-  selector: 'my-app',
+  selector: "my-app",
   standalone: true,
   imports: [CommonModule, ModalComponent],
-  template: `   
+  template: `
     <button (click)="modal.open()">Abrir modal</button>
 
     <app-modal #modal>
@@ -208,8 +203,17 @@ import { ModalComponent } from './modal/modal.component';
   `,
 })
 export class App {
-  name = 'Angular';
+  name = "Angular";
 }
 
 bootstrapApplication(App);
 ```
+
+
+🥳 Parabéns! Agora você tem em mãos uma modal reutilizável que pode ser implementada em seus projetos ou até mesmo em uma biblioteca de componentes (design system). 
+Lembre-se de considerar as necessidades do seu projeto e manter uma documentação clara e atualizada para facilitar o uso por outros membros da equipe.
+
+Além disso, você pode acessar o repositório no Github e o exemplo no Stackblitz para consultar o código e ter mais informações sobre a implementação da modal. 
+
+🌐 repository: https://github.com/DrewOliv/angular-cdk-component-modal-example
+💻 stackblitz: https://stackblitz.com/edit/angular-qhsjku?file=README.md

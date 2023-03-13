@@ -1,8 +1,8 @@
-E aí, pessoal! Já pensou em criar suas própria modal para suas aplicações web sem se preocupar com bibliotecas de terceiros? Com o @angular/cdk, podemos tornar essa tarefa muito mais fácil.
+E aí, pessoal! Já pensou em criar suas própria modal para suas aplicações web sem se preocupar com bibliotecas de terceiros? Com o `@angular/cdk`, podemos tornar essa tarefa muito mais fácil.
 
-O @angular/cdk contém vários componentes prontos para uso, como o Overlay e o Portal, que ajudam muito na criação de modais personalizadas.
+O `@angular/cdk` contém vários componentes prontos para uso, como o `Overlay` e o `Portal`, que ajudam muito na criação de modais personalizadas.
 
-Neste artigo, vou te mostrar como criar uma modal personalizada usando o @angular/cdk e @ViewChild. Então, pegue seu café e vamos ao código 👨‍💻
+Neste artigo, vou te mostrar como criar uma modal personalizada usando o `@ViewChild` e `@ViewChild`. Então, pegue seu café e vamos ao código 👨‍💻
 
 ## Pré-requisitos:
 
@@ -12,19 +12,19 @@ Para acompanhar este tutorial, você precisará de um projeto Angular e ter um b
 
 ### É Hora de implementar
 
-Para iniciar, é necessário instalar o pacote @angular/cdk através do comando npm install @angular/cdk ou utilizar a opção ng add @angular/cdk fornecida pelo @angular/cli. É importante também incluir os estilos disponíveis do @angular/cdk no seu arquivo de CSS global.
+Para iniciar, é necessário instalar o pacote `@angular/cdk` através do comando npm `install @angular/cdk` ou utilizar a opção `ng add @angular/cdk` fornecida pelo `@angular/cli`. É importante também incluir os estilos disponíveis do `@angular/cdk` no seu arquivo de CSS global.
 
 ```css
 @import "@angular/cdk/overlay-prebuilt.css";
 ```
 
-Para criar o nosso componente modal utilizando o @angular/cli, execute o seguinte comando no terminal dentro do diretório do seu projeto:
+Para criar o nosso componente modal utilizando o `@angular/cli`, execute o seguinte comando no terminal dentro do diretório do seu projeto:
 
 ```sh
 ng g c modal
 ```
 
-após gerar nosso component via @angular/cli devemos ter algo assim:
+após gerar nosso component via `@angular/cli` devemos ter algo assim:
 
 ```ts
 import { Component, OnInit } from "@angular/core";
@@ -42,9 +42,9 @@ export class ModalComponent implements OnInit {
 }
 ```
 
-Ótimo! Vamos começar criando uma variável chamada MODAL_DEFAULT_OPTIONS com alguns valores padrão. Nela, definimos o positionStrategy como GlobalPositionStrategy, o que fará com que o Overlay trabalhe com o posicionamento relativo à janela do navegador. Em seguida, chamamos os métodos centerHorizontally() e centerVertically() para alinhar nossa modal ao centro da tela.
+Ótimo! Vamos começar criando uma variável chamada `MODAL_DEFAULT_OPTIONS` com alguns valores padrão. Nela, definimos o positionStrategy como `GlobalPositionStrategy`, o que fará com que o Overlay trabalhe com o posicionamento relativo à janela do navegador. Em seguida, chamamos os métodos `centerHorizontally()` e `centerVertically()` para alinhar nossa modal ao centro da tela.
 
-Também definimos que a modal terá um fundo (hasBackdrop) e adicionamos uma classe personalizada chamada modal-panel para nosso painel. Por fim, definimos uma largura mínima para nossa modal de 500px.
+Também definimos que a modal terá um fundo `hasBackdrop` e adicionamos uma `class` personalizada chamada `modal-panel` para nosso painel. Por fim, definimos uma largura mínima para nossa modal de `500px`.
 
 ```ts
 export const MODAL_DEFAULT_OPTIONS: OverlayConfig = {
@@ -57,11 +57,11 @@ export const MODAL_DEFAULT_OPTIONS: OverlayConfig = {
 };
 ```
 
-O próximo passo é criar um ng-template em nosso arquivo HTML e incluir algumas tags HTML para ajudar a estruturar nossa modal:
+O próximo passo é criar um `ng-template` em nosso arquivo HTML e incluir algumas tags HTML para ajudar a estruturar nossa modal:
 
-Criamos um ng-template e demos a ele um nome de referência `#modalTemplate`.
+Criamos um `ng-template` e demos a ele um nome de referência `#modalTemplate`.
 Criamos uma div para agrupar nossos elementos.
-Adicionamos um ng-content com o seletor `[modal--content]`.
+Adicionamos um `ng-content` com o select `[modal--content]`.
 
 ```html
 <ng-template #modalTemplate>
@@ -71,9 +71,9 @@ Adicionamos um ng-content com o seletor `[modal--content]`.
 </ng-template>
 ```
 
-Vamos criar um ng-template para que o conteúdo seja chamado apenas quando criarmos nossa modal utilizando o `TemplatePortal`.
+Vamos criar um `ng-template` para que o conteúdo seja chamado apenas quando criarmos nossa modal utilizando o `TemplatePortal`.
 
-O TemplatePortal é uma classe do `@angular/cdk/portal` que nos permite inserir conteúdo em um componente ou elemento de destino.
+O `TemplatePortal` é uma classe do `@angular/cdk/portal` que nos permite inserir conteúdo em um componente ou elemento de destino.
 
 Agora que já temos o nosso template definido no HTML, vamos criar uma variável e utilizar o decorator `@ViewChild`, passando o nome que demos ao nosso template no HTML. Além disso, vamos criar uma variável chamada `overlayRef` para controlar a exibição da nossa modal.
 
@@ -209,11 +209,10 @@ export class App {
 bootstrapApplication(App);
 ```
 
-
-🥳 Parabéns! Agora você tem em mãos uma modal reutilizável que pode ser implementada em seus projetos ou até mesmo em uma biblioteca de componentes (design system). 
+🥳 Parabéns! Agora você tem em mãos uma modal reutilizável que pode ser implementada em seus projetos ou até mesmo em uma biblioteca de componentes (design system).
 Lembre-se de considerar as necessidades do seu projeto e manter uma documentação clara e atualizada para facilitar o uso por outros membros da equipe.
 
-Além disso, você pode acessar o repositório no Github e o exemplo no Stackblitz para consultar o código e ter mais informações sobre a implementação da modal. 
+Além disso, você pode acessar o repositório no Github e o exemplo no Stackblitz para consultar o código e ter mais informações sobre a implementação da modal.
 
 🌐 repository: https://github.com/DrewOliv/angular-cdk-component-modal-example
 💻 stackblitz: https://stackblitz.com/edit/angular-qhsjku?file=README.md
